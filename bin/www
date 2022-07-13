@@ -3,6 +3,7 @@
 const app = require('../app');
 const debug = require('debug')('linkshorter:server');
 const http = require('http');
+const mongose = require('mongoose');
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
@@ -52,6 +53,17 @@ function onError(error) {
       throw error;
   }
 }
+
+const connection = mongose.connect("mongodb://localhost:27017/link" , {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+connection.then(() => {
+  console.log('Connected to mongodb');
+}).catch((err) => {
+  console.log('Error connecting to mongodb: ' + err);
+});
 
 function onListening() {
   var addr = server.address();
